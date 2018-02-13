@@ -1,0 +1,1 @@
+game_controller = class("game_controller")
