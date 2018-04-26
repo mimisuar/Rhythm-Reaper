@@ -1,8 +1,10 @@
 songeditor = class("songeditor")
 
 function songeditor:init(song_file)
+	love._openConsole()
 	self.cond = conductor(song_file)
 	self.cond:load()
+	self.data = {}
 end
 
 function songeditor:update(dt)
@@ -23,4 +25,29 @@ function songeditor:keypressed(key)
 	if key == "space" then
 		self.cond:toggle_play()
 	end
+	
+	if key == "up" then
+		table.insert(self.data, { self.cond.counted_beat, "jump" })
+		print(self.cond.counted_beat, "jump")
+	end
+	
+	if key == "right" then
+		table.insert(self.data, { self.cond.counted_beat, "attack" })
+		print(self.cond.counted_beat, "attack")
+	end
+	
+	if key == "s" then
+		self:save()
+	end
+end
+
+function songeditor:save()
+	-- literally just copy the string table to the clipboard --
+	local str = tserial.pack(self.data, function(value)
+		print("Unable to pack " .. tostring(value) .. ".")
+	end, false)
+	
+	love.system.setClipboardText(str)
+	
+	print("Copied data to clipboard")
 end

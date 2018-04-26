@@ -7,7 +7,26 @@ function conductor:init(song_file)
 end
 
 function conductor:load()
-	self.song = love.audio.newSource(self.song_file, "stream")
+	local line_count = 1
+	for line in love.filesystem.lines(self.song_file) do
+		if line_count == 1 then
+			self.song_title = line
+		elseif line_count == 2 then
+			self.bpm = tonumber(line) or 120
+		elseif line_count == 3 then
+			self.offset = tonumber(line) or 0
+		else
+			local err
+			self.data, err = loadstring("return" .. line), err
+			if self.data then
+				self.data = self.data()
+			end
+		end
+		
+		line_count = line_count + 1
+	end
+	
+	self.song = love.audio.newSource(self.song_title, "stream")
 	self.position = 0
 	self.paused = false
 	self.quarter = 60 / self.bpm
@@ -30,9 +49,9 @@ end
 function conductor:update()
 	self.position = self.song:tell()
 	
-	if self.position > self.quarter * self.counted_beat then
-		self.counted_beat = self.counted_beat + 1
-		self.beat = self.beat + 1
+	if self.position > self.quarter / 2 * self.counted_beat then
+		self.counted_beat = self.counted_beat + 0.5
+		self.beat = self.beat + 0.5
 		if self.beat > self.beats_per_measure then
 			self.beat = 1
 			self.bar = self.bar + 1

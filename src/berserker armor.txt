@@ -1,0 +1,4 @@
+berserker armor.ogg
+120
+0
+{{7.5,"attack"},{7.5,"jump"},{8,"attack"},{8.5,"jump"},{9,"attack"},{9,"jump"},{9.5,"attack"},{10,"jump"},{10,"attack"},{10.5,"jump"},{11,"attack"},{11.5,"jump"},{11.5,"attack"},{12,"jump"},{12.5,"attack"},{13,"jump"},{13,"attack"},{14,"jump"},{14,"attack"},{14.5,"attack"},{14.5,"jump"},{15.5,"attack"},{15.5,"jump"},{16,"attack"},{16.5,"jump"},{17,"attack"},{17,"jump"},{17.5,"attack"},{18,"jump"},{18,"attack"},{18.5,"jump"},{19,"attack"},{19.5,"jump"},{19.5,"attack"},{20,"jump"},{20.5,"attack"},{21,"jump"},{21,"attack"},{21.5,"jump"},{22,"attack"},{22.5,"jump"},{22.5,"attack"}}
