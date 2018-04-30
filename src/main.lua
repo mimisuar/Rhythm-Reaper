@@ -1,11 +1,12 @@
 function love.load(args)
 	class = require("middleclass")
-	require("conductor")
+	require("secondtry.conductor")
 	require("songeditor")
 	tserial = require("Tserial")
 	local player = require("player")
+	love.graphics.setDefaultFilter("nearest", "nearest")
 	
-	editing = false
+	editing = true
 	
 	if editing then
 		se = songeditor("berserker armor.txt")
@@ -27,6 +28,7 @@ function love.update(dt)
 end
 
 function love.draw()
+	
 	if editing then
 		se:draw()
 	else
