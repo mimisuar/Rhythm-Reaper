@@ -4,7 +4,7 @@ function player:init()
 	self.width = 40
 	self.height = 40
 	self.x = 80
-	self.y = (love.graphics.getHeight() - love.graphics.getHeight() / 4) - self.height / 2
+	self.y = (love.graphics.getHeight() - 80)
 	self.y_speed = 0
 	self.gravity = 128
 	self.start_y = self.y

@@ -2,6 +2,7 @@ function love.load()
 	love.audio.stop()
 	class = require("middleclass")
 	require("conductor")
+	require("ground")
 	
 	c = conductor("berserker armor.txt")
 	c:load()
@@ -27,10 +28,14 @@ function love.load()
 	epsilon[1] = 0.05
 	epsilon[2] = 0.2
 	epsilon[3] = 0.3
+	
+	g = ground(c)
 end
 
 function love.update(dt)
 	c:update(dt)
+	
+	g:update(dt)
 end
 
 function draw_dots()
@@ -43,6 +48,7 @@ function love.draw()
 	love.graphics.print("Position: " .. tostring(c.position))
 	love.graphics.print("Beat: " .. tostring(c.counted_beat), 0, 16)
 	draw_dots()
+	g:draw()
 	
 	--love.graphics.rectangle("line", target_x, 80, 40, 40)
 	

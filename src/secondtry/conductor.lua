@@ -34,6 +34,8 @@ function conductor:load()
 	self.counted_beat = 1
 	self.beat = 1
 	self.bar = 1
+	
+	self.speed = self.bpm * self.beats_per_measure
 end
 
 function conductor:toggle_play()

@@ -1,7 +1,7 @@
 songeditor = class("songeditor")
 
 function songeditor:init(song_file)
-	love._openConsole()
+	--love._openConsole()
 	self.cond = conductor(song_file)
 	self.cond:load()
 	self.data = {}
