@@ -29,10 +29,10 @@ end
 
 function ground:update(dt)
 	for i=1, #self.x do
-		self.x[i] = self.x[i] - self.cond.speed * dt
+		self.x[i] = self.x[i] - self.cond.speed * dt * 0.25
 		
 		if self.x[i] < self.target_x then
-			self.x[i] = self.x[i] + self.bg:getWidth()
+			self.x[i] = self.x[i] + self.bg:getWidth() * 2
 		end
 	end
 end

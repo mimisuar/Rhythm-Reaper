@@ -1,4 +1,5 @@
 function love.load()
+	--love._openConsole()
 	love.audio.stop()
 	class = require("middleclass")
 	require("conductor")
@@ -22,7 +23,10 @@ function love.load()
 	dot_current = 1
 	
 	target_x = 80
-	dot_speed = c.bpm * c.beats_per_measure -- pixels / second --
+	dot_speed = c.bpm * 4--* c.beats_per_measure -- pixels / second --
+	
+	dot_speeds = { 0 }
+	
 	
 	epsilon = {}
 	epsilon[1] = 0.05
@@ -39,8 +43,10 @@ function love.update(dt)
 end
 
 function draw_dots()
-	for i=1, #dots do
-		love.graphics.circle("fill", ((dots[i] - c.position) * dot_speed) + target_x, 100, 4)
+	local max = dot_current + 5
+	if max > #dots then max = #dots end
+	for i=dot_current, max do
+		love.graphics.circle("fill", ((dots[i] - c.position) * dot_speed) + target_x, love.graphics.getHeight() - 40, 4)
 	end
 end
 
@@ -61,7 +67,7 @@ function love.draw()
 	for i=1, #epsilon do
 		love.graphics.setColor(colors[i])
 		local width = (epsilon[i] + 0.8) * 40
-		love.graphics.rectangle("line", target_x - width / 2, 80, width, 40)
+		love.graphics.rectangle("line", target_x - width / 2, love.graphics.getHeight() - 80, width, 40)
 		love.graphics.setColor(255, 255, 255)
 	end
 	
