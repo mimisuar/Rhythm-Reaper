@@ -11,9 +11,9 @@ function love.load(args)
 	
 	if editing then
 		se = songeditor("berserker armor.txt")
-		g = ground(se.cond)
+		g = ground()
 	else
-		cond = conductor("berserker armor.txt")
+		cond = conductor("21st.txt")
 		cond:load()
 		cond:toggle_play()
 		g = ground(cond)

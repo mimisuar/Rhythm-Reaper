@@ -1,6 +1,7 @@
 ground = class("ground")
 
 function ground:init(cond)
+	--love._openConsole()
 	self.bg = love.graphics.newCanvas(original_width, original_height)
 	
 	local brick = love.graphics.newImage("bricks1.png")
@@ -16,14 +17,26 @@ function ground:init(cond)
 	
 	self.cond = cond
 	
+	
 	self.x = { 0, self.bg:getWidth() }
 	self.target_x = -self.bg:getWidth()
+	
 end
 
 function ground:draw()
-	love.graphics.draw(self.bg, self.x[1])
+	for i=1, #self.x do
+		love.graphics.draw(self.bg, self.x[i])
+	end
 end
 
 function ground:update(dt)
-	self.x[1] = self.x[1] - self.cond.position * self.dot_speed
+	if self.cond then
+		for i=1, #self.x do
+			self.x[i] = self.x[i] - self.cond.speed * dt
+			
+			if self.x[i] < self.target_x then
+				self.x[i] = self.x[i] + self.bg:getWidth() * 2
+			end
+		end
+	end
 end

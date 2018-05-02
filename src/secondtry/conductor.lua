@@ -26,7 +26,7 @@ function conductor:load()
 	end
 	
 	self.song = love.audio.newSource(self.song_title, "stream")
-	self.position = 0
+	self.position = self.offset
 	self.paused = false
 	self.quarter = 60 / self.bpm
 	self.eighth = self.quarter / 2
@@ -36,6 +36,8 @@ function conductor:load()
 	self.bar = 1
 	
 	self.speed = self.bpm * self.beats_per_measure
+	
+	self.song:seek(self.offset)
 end
 
 function conductor:toggle_play()
@@ -53,6 +55,26 @@ function conductor:update()
 	
 	if self.position > self.eighth * self.counted_beat then
 		self.counted_beat = self.counted_beat + 1
+		self.beat = self.beat + 1
+		if self.beat > self.beats_per_measure * 2 then
+			self.beat = 1
+			self.bar = self.bar + 1
+		end
+	end
+end
+
+function conductor:set_pos_to_beat(db)
+	self.counted_beat = self.counted_beat + db
+	
+	if self.counted_beat < 1 then self.counted_beat = 1 end
+	
+	self.position = (self.counted_beat - 1) * self.eighth
+	self.song:seek(self.position)
+	
+	self.beat = 0
+	self.bar = 1
+	
+	for i=1, self.counted_beat do
 		self.beat = self.beat + 1
 		if self.beat > self.beats_per_measure * 2 then
 			self.beat = 1

@@ -17,8 +17,10 @@ function ground:init(cond)
 	
 	self.cond = cond
 	
+	
 	self.x = { 0, self.bg:getWidth() }
 	self.target_x = -self.bg:getWidth()
+	
 end
 
 function ground:draw()
@@ -28,11 +30,13 @@ function ground:draw()
 end
 
 function ground:update(dt)
-	for i=1, #self.x do
-		self.x[i] = self.x[i] - self.cond.speed * dt * 0.25
-		
-		if self.x[i] < self.target_x then
-			self.x[i] = self.x[i] + self.bg:getWidth() * 2
+	if self.cond then
+		for i=1, #self.x do
+			self.x[i] = self.x[i] - self.cond.speed * dt
+			
+			if self.x[i] < self.target_x then
+				self.x[i] = self.x[i] + self.bg:getWidth() * 2
+			end
 		end
 	end
 end
