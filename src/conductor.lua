@@ -19,7 +19,10 @@ function conductor:load()
 			self.data, err = loadstring("return" .. line), err
 			if self.data then
 				self.data = self.data()
+			else
+				error(err)
 			end
+			
 		end
 		
 		line_count = line_count + 1

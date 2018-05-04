@@ -26,7 +26,7 @@ end
 
 function player:update(dt)
 	if love.keyboard.isDown("up") and self.y == self.start_y then
-		self.y_speed = -24 * 60
+		self.y_speed = -16 * 60
 	end
 	
 	if not self.attacking and love.keyboard.isDown("right") then
