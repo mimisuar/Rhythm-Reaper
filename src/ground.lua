@@ -1,10 +1,10 @@
-ground = class("ground")
+local ground = class("ground")
 
 function ground:init(cond)
 	--love._openConsole()
 	self.bg = love.graphics.newCanvas(original_width, original_height)
 	
-	local brick = love.graphics.newImage("bricks1.png")
+	local brick = love.graphics.newImage("brick1.png")
 	love.graphics.setCanvas(self.bg)
 	
 	local quad = love.graphics.newQuad(40, 40, 40, 40, brick:getWidth(), brick:getHeight())
@@ -40,3 +40,5 @@ function ground:update(dt)
 		end
 	end
 end
+
+return ground

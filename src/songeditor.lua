@@ -116,10 +116,22 @@ function songeditor:keypressed(key)
 end
 
 function songeditor:save()
+	-- go through the dots, picking only the ones that are attack/jump --
+	local data = {}
+	for i=1, self.dot_count do
+		if self.dots[i].type ~= "" then
+			table.insert(data, {self.dots[i].beat, self.dots[i].type })
+		end
+	end
+	
 	-- literally just copy the string table to the clipboard --
-	local str = tserial.pack(self.data, function(value)
+	local str = tserial.pack(data, function(value)
 		print("Unable to pack " .. tostring(value) .. ".")
 	end, false)
 	
-	
+	local f = love.filesystem.newFile(self.cond.song_file, "w")
+	f:write(self.cond.song_title) f:write("\n")
+	f:write(tostring(self.cond.bpm)) f:write("\n")
+	f:write(tostring(self.cond.offset)) f:write("\n")
+	f:write(str)
 end

@@ -1,50 +1,26 @@
-function love.load(args)
+function love.load()
 	class = require("middleclass")
-	require("secondtry.conductor")
-	require("songeditor")
-	require("ground")
-	tserial = require("Tserial")
-	local player = require("player")
-	love.graphics.setDefaultFilter("nearest", "nearest")
+	objs = {}
+	objs.player = require("player")
+	objs.conductor = require("conductor")
+	objs.ground = require("ground")
 	
-	editing = true
+	objs.player.load_assets()
 	
-	if editing then
-		se = songeditor("berserker armor.txt")
-		g = ground()
-	else
-		cond = conductor("21st.txt")
-		cond:load()
-		cond:toggle_play()
-		g = ground(cond)
-	end
+	player = objs.player()
+	conductor = objs.conductor("berserker armor.txt")
+	ground = objs.ground(conductor)
 	
-	
-	p = player()
+	conductor:load()
 end
 
 function love.update(dt)
-	g:update(dt)
-	if editing then
-		se:update()
-	else
-		cond:update()
-	end
+	player:update(dt)
+	conductor:update()
+	ground:update(dt)
 end
 
 function love.draw()
-	
-	g:draw()
-	if editing then
-		se:draw()
-	else
-		love.graphics.print(cond.position)
-	end
-	p:draw()
-end
-
-function love.keypressed(key)
-	if editing then
-		se:keypressed(key)
-	end
+	player:draw()
+	ground:draw()
 end

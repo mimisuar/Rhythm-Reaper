@@ -1,4 +1,4 @@
-conductor = class("conductor")
+local conductor = class("conductor")
 
 function conductor:init(song_file)
 	self.song_file = song_file
@@ -82,3 +82,5 @@ function conductor:set_pos_to_beat(db)
 		end
 	end
 end
+
+return conductor
