@@ -18,19 +18,29 @@ end
 
 function enemy_eye:update(dt, position)
 	if self.alive then
-		self.x = (self.position - position) * conductor.speed + target_x
-		self.y = player.y
+		self.x = (self.position - position) * gameplay.get("conductor").speed + gameplay.get("target_x")
+		self.y = gameplay.get("player").y
 	else
-		enemy_eye.dead_anime:update(dt)
+		enemy_eye.dead_anim:update(dt)
+		if enemy_eye.dead_anim:is_finished() then
+			self.x = -50
+		end
 	end
 end
 
 function enemy_eye:draw()
+	--love.graphics.circle("line", self.x, love.graphics.getHeight() - 120, 8)
+	
 	if self.alive then
 		love.graphics.draw(enemy_eye.alive_sprite, enemy_eye.alive_anim:get_frame(), self.x, self.y)
 	else
 		love.graphics.draw(enemy_eye.dead_sprite, enemy_eye.dead_anim:get_frame(), self.x, self.y)
 	end
+end
+
+function enemy_eye:kill()
+	self.alive = false
+	enemy_eye.dead_anim:set_frame(1)
 end
 
 return enemy_eye

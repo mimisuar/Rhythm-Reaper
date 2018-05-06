@@ -1,51 +1,55 @@
-function love.load()
+function love.load(args)
+	love.graphics.setDefaultFilter("nearest", "nearest")
+	
 	class = require("middleclass")
-	objs = {}
-	objs.player = require("player")
-	objs.conductor = require("conductor")
-	objs.ground = require("ground")
-	objs.enemy_eye = require("enemy_eye")
-	objs.spike_wall = require("spike_wall")
+	require("gameplay")
+	require("songeditor")
 	
-	objs.player.load_assets()
-	objs.enemy_eye.load_assets()
-	objs.spike_wall.load_assets()
-	
-	player = objs.player()
-	conductor = objs.conductor("berserker armor.txt")
-	ground = objs.ground(conductor)
-	
-	conductor:load()
-	
-	enemies = {}
-	for i, element in ipairs(conductor.data) do
-		local pos = (element[1] - 1) * conductor.eighth
-		if element[2] == "attack" then
-			table.insert(enemies, objs.enemy_eye(pos))
-		elseif element[2] == "jump" then
-			table.insert(enemies, objs.spike_wall(pos))
+	args = {"--se", "berserker armor.txt"}
+	for i=1, #args do
+		if args[i] == "--se" then
+			assert(type(args[i + 1]) == "string", "Invalid song title.")
+			editing_mode = true
+			editing_song = args[i + 1]
 		end
 	end
 	
-	conductor:toggle_play()
+	if not editing_mode then
+		first_level = gameplay()
+	else
+		se = songeditor(editing_song)
+	end
+	
 end
 
 function love.update(dt)
-	player:update(dt)
-	conductor:update()
-	ground:update(dt)
-	target_x = player.x + 40
-	
-	for i, enemy in ipairs(enemies) do
-		enemy:update(dt, conductor.position)
+	if not editing_mode then
+		first_level:update(dt)
+	else
+		se:update(dt)
 	end
 end
 
 function love.draw()
-	player:draw()
-	ground:draw()
-	
-	for i, enemy in ipairs(enemies) do
-		enemy:draw()
+	if not editing_mode then
+		first_level:draw()
+	else
+		se:draw()
+	end
+end
+
+function love.mousepressed(x, y, b, isTouch)
+	if not editing_mode then
+		first_level:mousepressed(x, y)
+	else
+		se:mousepressed(x, y)
+	end
+end
+
+function love.keypressed(key)
+	if not editing_mode then
+		first_level:keypressed(key)
+	else
+		se:keypressed(key)
 	end
 end

@@ -1,10 +1,10 @@
 songeditor = class("songeditor")
+require("Tserial")
 
 function songeditor:init(song_file)
 	--love._openConsole()
-	self.cond = conductor(song_file)
+	self.cond = require("conductor")(song_file)
 	self.cond:load()
-	self.data = {}
 	
 	--self.target_x = 
 	self.dot_buffer = 15
@@ -17,8 +17,18 @@ function songeditor:init(song_file)
 end
 
 function songeditor:init_dots()
+	local c = 1
 	for i=1, self.dot_count do
-		table.insert(self.dots, {beat = i, type=""})
+		local curr_dot = self.cond.data[c]
+		local dot_tmp = {beat = i, type = ""}
+		
+		if curr_dot and i == curr_dot[1] and curr_dot[2] ~= "" then
+			dot_tmp.beat = curr_dot[1]
+			dot_tmp.type = curr_dot[2]
+			c = c + 1
+		end
+		
+		table.insert(self.dots, dot_tmp)
 	end
 end
 
@@ -125,7 +135,7 @@ function songeditor:save()
 	end
 	
 	-- literally just copy the string table to the clipboard --
-	local str = tserial.pack(data, function(value)
+	local str = Tserial.pack(data, function(value)
 		print("Unable to pack " .. tostring(value) .. ".")
 	end, false)
 	

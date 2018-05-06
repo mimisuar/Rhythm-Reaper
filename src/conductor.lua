@@ -37,6 +37,7 @@ function conductor:load()
 	self.counted_beat = 1
 	self.beat = 1
 	self.bar = 1
+	self.fading_out = false
 	
 	self.speed = self.bpm * self.beats_per_measure
 	
@@ -84,6 +85,13 @@ function conductor:set_pos_to_beat(db)
 			self.bar = self.bar + 1
 		end
 	end
+end
+
+function conductor:fade_out(dt)
+	local v = self.song:getVolume()
+	v = v - (0.5 * dt)
+	if v < 0 then v = 0 end
+	self.song:setVolume(v)
 end
 
 return conductor

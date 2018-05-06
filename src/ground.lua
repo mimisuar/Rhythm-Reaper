@@ -7,7 +7,7 @@ function ground:init(cond)
 	local brick = love.graphics.newImage("brick1.png")
 	love.graphics.setCanvas(self.bg)
 	
-	local quad = love.graphics.newQuad(40, 40, 40, 40, brick:getWidth(), brick:getHeight())
+	local quad = love.graphics.newQuad(40, 0, 40, 40, brick:getWidth(), brick:getHeight())
 	local y = self.bg:getHeight() - 40
 	for x=0, self.bg:getWidth() - 40, 40 do
 		love.graphics.draw(brick, quad, x, y)

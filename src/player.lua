@@ -11,8 +11,8 @@ end
 function player:init()
 	self.width = 40
 	self.height = 40
-	self.x = 80
-	self.y = (love.graphics.getHeight() - 80)
+	self.x = 10
+	self.y = (original_height - 80)
 	self.y_speed = 0
 	self.gravity = 128
 	self.start_y = self.y
@@ -24,17 +24,20 @@ function player:init()
 	self.attacking = false
 end
 
-function player:update(dt)
-	if love.keyboard.isDown("up") and self.y == self.start_y then
+function player:jump()
+	if self.y == self.start_y then
 		self.y_speed = -16 * 60
 	end
-	
-	if not self.attacking and love.keyboard.isDown("right") then
+end
+
+function player:attack()
+	if not self.attacking then
 		self.attacking = true
 		player.scythe_swing_anim:set_frame(1)
 	end
-		
-	
+end
+
+function player:update(dt)	
 	self.y = self.y + self.y_speed * dt
 	self.y_speed = self.y_speed + self.gravity
 	if self.y > self.start_y then
