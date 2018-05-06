@@ -1,7 +1,7 @@
 local spike_wall = class("spike_wall")
 
 function spike_wall.load_assets()
-	spike_wall.static.sprite = love.graphics.newImage("jump-ob.png")
+	spike_wall.static.sprite = love.graphics.newImage("graphics/jump-ob.png")
 end
 
 function spike_wall:init(position)
@@ -15,7 +15,7 @@ function spike_wall:update(dt, position)
 end
 
 function spike_wall:draw()
-	love.graphics.draw(spike_wall.static.sprite, self.x + 10, self.y)
+	love.graphics.draw(spike_wall.static.sprite, self.x + 10 + global_visual_delay, self.y)
 	--love.graphics.circle("line", self.x, love.graphics.getHeight() - 120, 8)
 end
 

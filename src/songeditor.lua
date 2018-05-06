@@ -139,7 +139,10 @@ function songeditor:save()
 		print("Unable to pack " .. tostring(value) .. ".")
 	end, false)
 	
-	local f = love.filesystem.newFile(self.cond.song_file, "w")
+	local f = love.filesystem.newFile(self.cond.song_file)
+	local success, err = f:open("w")
+	if not success then error(err) end
+	
 	f:write(self.cond.song_title) f:write("\n")
 	f:write(tostring(self.cond.bpm)) f:write("\n")
 	f:write(tostring(self.cond.offset)) f:write("\n")

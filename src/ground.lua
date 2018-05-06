@@ -4,7 +4,7 @@ function ground:init(cond)
 	--love._openConsole()
 	self.bg = love.graphics.newCanvas(original_width, original_height)
 	
-	local brick = love.graphics.newImage("brick1.png")
+	local brick = love.graphics.newImage("graphics/brick1.png")
 	love.graphics.setCanvas(self.bg)
 	
 	local quad = love.graphics.newQuad(40, 0, 40, 40, brick:getWidth(), brick:getHeight())

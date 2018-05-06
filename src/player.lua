@@ -2,9 +2,9 @@ local player = class("player")
 local anim = require("anim")
 
 function player.load_assets()
-	player.static.reaper_sprite = love.graphics.newImage("grim-reaper.png")
-	player.static.scythe_sprite = love.graphics.newImage("scythe.png")
-	player.static.scythe_swing_sprite = love.graphics.newImage("scythe-swing.png")
+	player.static.reaper_sprite = love.graphics.newImage("graphics/grim-reaper.png")
+	player.static.scythe_sprite = love.graphics.newImage("graphics/scythe.png")
+	player.static.scythe_swing_sprite = love.graphics.newImage("graphics/scythe-swing.png")
 	player.static.scythe_swing_anim = anim(player.static.scythe_swing_sprite, 60, 40, 0.1, false)
 end
 

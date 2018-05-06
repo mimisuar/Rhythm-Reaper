@@ -2,7 +2,7 @@ gameplay = class("gameplay")
 
 local global_gameplay = nil
 
-function gameplay:init()
+function gameplay:init(songfile)
 	global_gameplay = self
 	
 	self.objs = {}
@@ -17,10 +17,10 @@ function gameplay:init()
 	self.objs.enemy_eye.load_assets()
 	self.objs.spike_wall.load_assets()
 	
-	self.snare_sound = love.audio.newSource("snare03.ogg", "static")
+	self.snare_sound = love.audio.newSource("sounds/snare03.ogg", "static")
 	
 	self.player = self.objs.player()
-	self.conductor = self.objs.conductor("berserker armor.txt")
+	self.conductor = self.objs.conductor(songfile)
 	self.ground = self.objs.ground(self.conductor)
 	
 	self.target_x = self.player.x + 20
@@ -49,11 +49,6 @@ function gameplay:init()
 	self.current_enemy = 1
 	
 	self.conductor:toggle_play()
-	
-	self.canvas = love.graphics.newCanvas()
-	
-	self.scale_x = love.graphics.getWidth() / original_width
-	self.scale_y = love.graphics.getHeight() / original_height
 	
 	self.min = 1
 	self.max = #self.enemies
@@ -90,12 +85,7 @@ function gameplay:update(dt)
 end
 
 function gameplay:draw()
-	--love.graphics.scale(2, 2)
-	--love.graphics.translate(0, -original_height / 2)
-	love.graphics.setCanvas(self.canvas)
-	love.graphics.clear()
-	
-	--love.graphics.circle("fill", self.target_x, love.graphics.getHeight() - 120, 2)
+	screen:set()
 	
 	self.player:draw()
 	self.ground:draw()
@@ -108,9 +98,10 @@ function gameplay:draw()
 	end
 	
 	self.ft:draw()
-	love.graphics.setCanvas()
 	
-	love.graphics.draw(self.canvas, 0, 0, 0, self.scale_x, self.scale_y)
+	screen:unset()
+	
+	screen:draw()
 	love.graphics.print(string.format("Score: %07d", self.score))
 	love.graphics.print("Combo: " .. tostring(self.combo), 0, 16)
 	love.graphics.print(string.format("Accuracy: %0f%%", (self.hit / self.max_hit) * 100), 0, 32) 
@@ -159,9 +150,10 @@ end
 
 function gameplay:calc_score(dt)
 	-- think about the tiers --
-	local e3 = self.conductor.eighth / 1 -- 50 --
-	local e2 = self.conductor.eighth / 4 -- 100 --
-	local e1 = self.conductor.eighth / 8 -- 500 --
+	local db = (self.conductor.eighth + global_visual_delay)
+	local e3 = db -- 50 --
+	local e2 = db / 4 -- 100 --
+	local e1 = db / 8 -- 500 --
 	
 	self.combo = self.combo + 1
 	
