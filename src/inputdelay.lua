@@ -5,14 +5,14 @@ function inputdelay:init()
 	self.average = 0
 	self.sample = love.audio.newSource("sounds/clap01.ogg", "static")
 	
-	local ft = require("floating_text")
-	self.ft = ft(100, 100)
-	
 	self.flash_on = false
+	
+	self.ground = require("ground")()
+	self.player = require("player")()
 	
 	self.et = 0
 	self.beat = 1
-	self.time_to_test = 30
+	self.time_to_test = 15
 	
 	self.flash_on_time = 0
 end
@@ -21,7 +21,8 @@ function inputdelay:update(dt)
 	self.et = self.et + dt
 	self.time_to_test = math.max(self.time_to_test - dt, 0)
 	
-	self.ft:update(dt)
+	self.player:update(dt)
+	
 	
 	if self.time_to_test > 0 and self.et > self.beat then
 		self.et = 0
@@ -47,7 +48,11 @@ function inputdelay:respond()
 			self.average = sum / #self.times
 		end
 		
-		self.ft:print("Click!")
+		if math.random(1, 10) == 1 then
+			self.player:attack()
+		else
+			self.player:jump()
+		end
 	end
 	
 	
@@ -68,11 +73,16 @@ end
 function inputdelay:draw()
 	
 	love.graphics.print("Touch the screen when you hear the sound")
-	self.ft:draw()
+	
+	screen:set()
+	self.ground:draw()
+	self.player:draw()
+	screen:unset()
+	screen:draw()
 	
 	if self.time_to_test == 0 then
 		love.graphics.print(string.format("Average: %f s", self.average), 0, 16)
 		love.graphics.print("Press anywhere to continue", 0, 32)
-		global_visual_delay = self.average
+		global_audio_delay = self.average
 	end
 end

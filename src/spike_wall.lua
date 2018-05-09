@@ -11,11 +11,11 @@ function spike_wall:init(position)
 end
 
 function spike_wall:update(dt, position)
-	self.x = (self.position - position) * gameplay.get("conductor").speed + gameplay.get("target_x")
+	self.x = (self.position - position) * gameplay.get("conductor").speed + gameplay.get("target_x") - global_video_offset
 end
 
 function spike_wall:draw()
-	love.graphics.draw(spike_wall.static.sprite, self.x + 10 + global_visual_delay, self.y)
+	love.graphics.draw(spike_wall.static.sprite, self.x, self.y)
 	--love.graphics.circle("line", self.x, love.graphics.getHeight() - 120, 8)
 end
 

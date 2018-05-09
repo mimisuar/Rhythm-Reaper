@@ -18,7 +18,7 @@ end
 
 function enemy_eye:update(dt, position)
 	if self.alive then
-		self.x = (self.position - position) * gameplay.get("conductor").speed + gameplay.get("target_x")
+		self.x = (self.position - position) * gameplay.get("conductor").speed + gameplay.get("target_x") - global_video_offset
 		self.y = gameplay.get("player").y
 		enemy_eye.alive_anim:update(dt)
 	else

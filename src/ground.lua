@@ -16,10 +16,19 @@ function ground:init(cond)
 	love.graphics.setCanvas()
 	
 	self.cond = cond
+	if self.cond then
+		self.max_speed = self.cond.speed
+	else
+		self.max_speed = 0
+	end
+	self.speed = 0
 	
 	
 	self.x = { 0, self.bg:getWidth() }
 	self.target_x = -self.bg:getWidth()
+	
+	self.slowing_down = false
+	self.speeding_up = false
 	
 end
 
@@ -32,13 +41,32 @@ end
 function ground:update(dt)
 	if self.cond then
 		for i=1, #self.x do
-			self.x[i] = self.x[i] - self.cond.speed * dt
+			self.x[i] = self.x[i] - self.speed * dt
 			
 			if self.x[i] < self.target_x then
 				self.x[i] = self.x[i] + self.bg:getWidth() * 2
 			end
 		end
+		
+		if self.slowing_down then
+			self.speed = math.max(self.speed - (5 * 60) * dt, 0)
+			if self.speed == 0 then self.slowing_down = false end
+		end
+		
+		if self.speeding_up then
+			self.speed = math.min(self.speed + (5 * 60) * dt, self.max_speed)
+			if self.speed == self.max_speed then self.speeding_up = false end
+		end
 	end
+end
+
+function ground:slow_down()
+	self.slowing_down = true
+end
+
+
+function ground:speed_up()
+	self.speeding_up = true
 end
 
 return ground

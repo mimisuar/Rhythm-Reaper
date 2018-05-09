@@ -1,7 +1,7 @@
 screen = class("screen")
 
 function screen:init()
-	self.canvas = love.graphics.newCanvas()
+	self.canvas = love.graphics.newCanvas(800, 400)
 	self.scale_x = love.graphics.getWidth() / original_width
 	self.scale_y = love.graphics.getHeight() / original_height
 end

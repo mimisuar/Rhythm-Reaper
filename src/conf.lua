@@ -1,5 +1,5 @@
 function love.conf(t)
-	t.title = "Rhythm Game"
+	t.title = "Reaper Rhythm"
 	original_width = 400
 	original_height = 200
 	

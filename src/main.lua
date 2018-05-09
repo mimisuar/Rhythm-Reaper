@@ -6,14 +6,20 @@ function love.load(args)
 	require("gameplay")
 	require("songeditor")
 	require("inputdelay")
+	require("aboutpage")
 	require("screen")
+	require("videooffset")
 	screen:init()
+	
+	require("player").load_assets()
+	require("enemy_eye").load_assets()
+	require("spike_wall").load_assets()
 	
 	--if not love.filesystem.getInfo("songs", "directory") then
 	love.filesystem.createDirectory("songs")
 	--end
 	
-	--args = {"--se", "songs/berserker armor.txt"}
+	--args = {"--se", "songs/frozenbits.txt"}
 	global_state = {}
 	for i=1, #args do
 		if args[i] == "--se" then
@@ -24,7 +30,8 @@ function love.load(args)
 		end
 	end
 	
-	global_visual_delay = 0 -- seconds
+	global_audio_delay = 0 -- seconds
+	global_video_offset = 0
 	if not editing_mode then
 		--global_state = gameplay("songs/berserker armor.txt")
 		--global_state = inputdelay()

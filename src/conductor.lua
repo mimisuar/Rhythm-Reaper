@@ -6,6 +6,7 @@ function conductor:init(song_file)
 end
 
 function conductor:load()
+	self.data = {}
 	local line_count = 1
 	for line in love.filesystem.lines(self.song_file) do
 		if line_count == 1 then
@@ -49,6 +50,13 @@ function conductor:toggle_play()
 		self.song:pause()
 		self.playing = false
 	else
+		self.song:play()
+		self.playing = true
+	end
+end
+
+function conductor:play()
+	if not self.song:isPlaying() then
 		self.song:play()
 		self.playing = true
 	end

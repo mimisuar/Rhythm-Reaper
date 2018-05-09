@@ -15,8 +15,41 @@ function mainmenu:init()
 	end
 	table.insert(self.elements, b_armor)
 	
+	local organ = {}
+	organ.text = "Organelle"
+	organ.x = 10
+	organ.y = b_armor.y + b_armor.height + 10
+	organ.width = 200
+	organ.height = 20
+	organ.on_click = function() 
+		global_state = gameplay("songs/organelle.txt")
+	end
+	table.insert(self.elements, organ)
+	
+	local hell = {}
+	hell.text = "Helloween"
+	hell.x = 10
+	hell.y = organ.y + organ.height + 10
+	hell.width = 200
+	hell.height = 20
+	hell.on_click = function() 
+		global_state = gameplay("songs/helloween.txt")
+	end
+	table.insert(self.elements, hell)
+	
+	local froz = {}
+	froz.text = "Frozen Bits"
+	froz.x = 10
+	froz.y = hell.y + hell.height + 10
+	froz.width = 200
+	froz.height = 20
+	froz.on_click = function() 
+		global_state = gameplay("songs/frozenbits.txt")
+	end
+	table.insert(self.elements, froz)
+	
 	local id = {}
-	id.text = "Configure input delay"
+	id.text = "Configure audio delay"
 	id.x = 10
 	id.y = original_height - 40
 	id.width = 140
@@ -26,6 +59,17 @@ function mainmenu:init()
 	end
 	table.insert(self.elements, id)
 	
+	local vo = {}
+	vo.text = "Configure video offset"
+	vo.x = 10
+	vo.y = original_height - 70
+	vo.width = 140
+	vo.height = 20
+	vo.on_click = function()
+		global_state = videooffset()
+	end
+	table.insert(self.elements, vo)
+	
 	local about = {}
 	about.text = "About"
 	about.x = id.x + id.width + 20
@@ -33,9 +77,20 @@ function mainmenu:init()
 	about.height = id.height
 	about.width = 60
 	about.on_click = function()
-		love.system.openURL("https://love2d.org/wiki/love.system.openURL")
+		global_state = aboutpage()
 	end
 	table.insert(self.elements, about)
+	
+	local video = {}
+	video.text = "Video"
+	video.x = about.x + about.width + 20
+	video.y = id.y
+	video.height = id.height
+	video.width = 60
+	video.on_click = function()
+		love.system.openURL("https://www.youtube.com/watch?v=qKqqRLnmXrg")
+	end
+	table.insert(self.elements, video)
 end
 
 function mainmenu:update(dt)
@@ -56,7 +111,8 @@ function mainmenu:draw()
 	love.graphics.setColor(1.0, 1.0, 1.0)
 	screen:draw()
 	
-	love.graphics.print(string.format("Average delay: %f seconds", global_visual_delay))
+	love.graphics.print(string.format("Average audio latency: %.2f seconds", global_audio_delay))
+	love.graphics.print(string.format("Average video offset: %.2f", global_video_offset), 400)
 end
 
 function mainmenu:mousepressed(x, y)

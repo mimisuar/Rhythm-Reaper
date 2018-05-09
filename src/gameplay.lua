@@ -12,18 +12,14 @@ function gameplay:init(songfile)
 	self.objs.enemy_eye = require("enemy_eye")
 	self.objs.spike_wall = require("spike_wall")
 	self.objs.ft = require("floating_text")
-	
-	self.objs.player.load_assets()
-	self.objs.enemy_eye.load_assets()
-	self.objs.spike_wall.load_assets()
-	
+
 	self.snare_sound = love.audio.newSource("sounds/snare03.ogg", "static")
 	
 	self.player = self.objs.player()
 	self.conductor = self.objs.conductor(songfile)
-	self.ground = self.objs.ground(self.conductor)
 	
-	self.target_x = self.player.x + 20
+	
+	self.target_x = self.player.x + 30
 	
 	self.ft = self.objs.ft(self.player.x, self.player.y - 20)
 	
@@ -31,6 +27,7 @@ function gameplay:init(songfile)
 	self.combo = 0
 	
 	self.conductor:load()
+	self.ground = self.objs.ground(self.conductor)
 	
 	self.enemies = {}
 	self.hit = 0
@@ -47,16 +44,15 @@ function gameplay:init(songfile)
 	end
 	
 	self.current_enemy = 1
-	
-	self.conductor:toggle_play()
+	self.ground:speed_up()
 	
 	self.min = 1
 	self.max = #self.enemies
 end
 
 function gameplay:update(dt)
-	self.player:update(dt)
 	self.conductor:update()
+	self.player:update(dt)
 	self.ground:update(dt)
 	self.ft:update(dt)
 	
@@ -78,14 +74,27 @@ function gameplay:update(dt)
 		end
 	end
 	
+	if self.ground.speed == self.ground.max_speed and self.current_enemy == 1 then
+		self.conductor:play()
+	end
+	
 	if self.current_enemy > #self.enemies then
 		-- start fading out the audio --
 		self.conductor:fade_out(dt)
+		self.ground:slow_down()
 	end
+	
+	
 end
 
 function gameplay:draw()
 	screen:set()
+	
+	if self.ground.speed > 0 then
+		love.graphics.print("JUMP", original_width / 2 - 100, 32)
+		love.graphics.print("ATTACK", original_width / 2 + 20, 32)
+	end
+
 	
 	self.player:draw()
 	self.ground:draw()
@@ -99,12 +108,34 @@ function gameplay:draw()
 	
 	self.ft:draw()
 	
+	if self.ground.speed == 0 and self.current_enemy > #self.enemies then
+		love.graphics.print("Rank " .. self:calc_rank(), 40, 40)
+		love.graphics.print(string.format("Accuracy: %02f%%", (self.hit / self.max_hit) * 100), 40, 60)
+	end
+	
 	screen:unset()
 	
 	screen:draw()
 	love.graphics.print(string.format("Score: %07d", self.score))
 	love.graphics.print("Combo: " .. tostring(self.combo), 0, 16)
-	love.graphics.print(string.format("Accuracy: %0f%%", (self.hit / self.max_hit) * 100), 0, 32) 
+	
+end
+
+function gameplay:calc_rank()
+	local accuracy = self.hit / self.max_hit
+	if accuracy > 0.97 then
+		return "S"
+	elseif accuracy > 0.93 then
+		return "A"
+	elseif accuracy > 0.85 then
+		return "B"
+	elseif accuracy > 0.70 then
+		return "C"
+	elseif accuracy > 0.50 then
+		return "D"
+	else
+		return "F"
+	end
 end
 
 function gameplay:attack()
@@ -120,6 +151,7 @@ function gameplay:attack()
 			enemy:kill()
 			self.current_enemy = self.current_enemy + 1
 			self:calc_score(delta)
+			self:play_snare()
 		else 
 			-- don't kill it, but cancel the combo --
 			self.combo = 0
@@ -140,6 +172,7 @@ function gameplay:jump()
 		if delta < self.conductor.eighth / 2 then
 			self.current_enemy = self.current_enemy + 1
 			self:calc_score(delta)
+			self:play_snare()
 		else 
 			-- don't kill it, but cancel the combo --
 			self.combo = 0
@@ -150,7 +183,7 @@ end
 
 function gameplay:calc_score(dt)
 	-- think about the tiers --
-	local db = (self.conductor.eighth + global_visual_delay)
+	local db = (self.conductor.eighth)
 	local e3 = db -- 50 --
 	local e2 = db / 4 -- 100 --
 	local e1 = db / 8 -- 500 --
@@ -160,17 +193,16 @@ function gameplay:calc_score(dt)
 	if dt < e1 then
 		self.score = self.score + 500 * self.combo
 		self.ft:print("500", {1.0, 1.0, 0.0})
-		self:play_snare()
+		
 		self.hit = self.hit + 3
 	elseif dt < e2 then
 		self.score = self.score + 100 * self.combo
 		self.ft:print("100", {0.0, 1.0, 0.0})
-		self:play_snare()
+
 		self.hit = self.hit + 2
 	elseif dt < e3 then
 		self.score = self.score + 50 * self.combo
 		self.ft:print("50", {1.0, 0.0, 1.0})
-		self:play_snare()
 		self.hit = self.hit + 1
 	end
 end
@@ -180,6 +212,10 @@ function gameplay:mousepressed(x, y)
 		self:jump()
 	else
 		self:attack()
+	end
+	
+	if self.ground.speed == 0 and self.current_enemy > #self.enemies then
+		global_state = mainmenu()
 	end
 end
 
